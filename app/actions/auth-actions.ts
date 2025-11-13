@@ -162,7 +162,7 @@ export async function registerAction(
       }
     }
 
-    // 5. Create user profile
+    // 5. Create user profile (auto-approve for immediate access)
     const { data: userProfile, error: profileError } = await supabaseAdmin
       .from("user_profiles")
       .insert([
@@ -171,7 +171,7 @@ export async function registerAction(
           email,
           full_name: name,
           org_id,
-          account_status: "PENDING",
+          account_status: "APPROVED",
         },
       ])
       .select()
