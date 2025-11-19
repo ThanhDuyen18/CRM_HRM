@@ -381,17 +381,17 @@ const AttendanceManagement = () => {
               const shiftLabel = SHIFT_TYPES.find(st => st.value === shift.shift_type)?.label;
               return (
                 <Card key={shift.id} className="hover:shadow-medium transition-shadow">
-                  <CardContent className="pt-6 pb-6 flex items-center justify-between">
-                    <div className="space-y-1">
-                      <p className="font-semibold text-lg">{shiftLabel}</p>
-                      <p className="text-sm text-muted-foreground">
+                  <CardContent className="p-3 md:p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+                    <div className="space-y-1 min-w-0">
+                      <p className="font-semibold text-base md:text-lg">{shiftLabel}</p>
+                      <p className="text-xs md:text-sm text-muted-foreground">
                         {shift.start_time} - {shift.end_time}
                       </p>
                       {shift.required && (
-                        <Badge variant="secondary" className="mt-2">Bắt buộc</Badge>
+                        <Badge variant="secondary" className="mt-2 w-fit text-xs">Bắt buộc</Badge>
                       )}
                     </div>
-                    <div className="flex gap-2">
+                    <div className="flex gap-2 flex-shrink-0">
                       <Button
                         size="sm"
                         variant="outline"
@@ -400,17 +400,19 @@ const AttendanceManagement = () => {
                           setShowEditDialog(true);
                         }}
                         disabled={isLoading}
+                        className="text-xs md:text-sm"
                       >
-                        <Edit2 className="h-4 w-4 mr-1" />
-                        Sửa
+                        <Edit2 className="h-3 w-3 md:h-4 md:w-4 mr-1" />
+                        <span className="hidden sm:inline">Sửa</span>
                       </Button>
                       <Button
                         size="sm"
                         variant="destructive"
                         onClick={() => handleDeleteShift(shift.id)}
                         disabled={isLoading}
+                        className="text-xs md:text-sm"
                       >
-                        <X className="h-4 w-4" />
+                        <X className="h-3 w-3 md:h-4 md:w-4" />
                       </Button>
                     </div>
                   </CardContent>
