@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
-import AttendanceWidget from "@/components/attendance/AttendanceWidget";
+import ShiftAttendanceWidget from "@/components/attendance/ShiftAttendanceWidget";
 import { getUserRole, getCurrentUser } from "@/lib/auth";
 import { UserRole } from "@/lib/auth";
-
-// 1. Import đồng hồ
 import VietnamClock from "@/components/VietnamClock";
 
 const Attendance = () => {
@@ -23,25 +21,21 @@ const Attendance = () => {
   return (
     <DashboardLayout role={role}>
       <div className="space-y-6 animate-fade-in pb-20 md:pb-6">
-        
-        {/* Tiêu đề + đồng hồ */}
-        <div className="mb-2 flex justify-between items-start">
-          
+        {/* Header */}
+        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-4">
           <div>
-            <h2 className="text-4xl font-heading font-bold bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
+            <h1 className="bg-gradient-to-r from-primary to-primary-glow bg-clip-text text-transparent">
               Chấm Công
-            </h2>
+            </h1>
             <p className="text-muted-foreground mt-2">
-              Theo dõi thời gian làm việc và trạng thái chấm công của bạn
+              Quản lý chấm công theo ca làm việc và theo dõi tăng ca
             </p>
           </div>
-
           <VietnamClock />
         </div>
 
-        <div className="shadow-strong rounded-lg">
-          <AttendanceWidget />
-        </div>
+        {/* Content */}
+        <ShiftAttendanceWidget />
       </div>
     </DashboardLayout>
   );
