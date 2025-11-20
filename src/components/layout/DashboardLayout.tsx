@@ -103,7 +103,7 @@ const DashboardLayout = ({ children, role = 'staff' }: DashboardLayoutProps) => 
     };
     
     const getFullName = () => {
-        return profile?.first_name && profile?.last_name ? `${profile.last_name} ${profile.first_name}` : 'Người dùng';
+        return profile?.full_name || 'Người dùng';
     };
 
     const getRoleDisplayName = (r: UserRole) => {
