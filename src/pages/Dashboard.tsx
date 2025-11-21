@@ -110,8 +110,8 @@ const Dashboard = () => {
                 totalEmployees,
                 pendingApprovals,
             }));
-        } catch (error) {
-            console.error("Lỗi tải stats Admin:", error);
+        } catch (error: any) {
+            console.error("Lỗi tải stats Admin:", error?.message || error);
         }
     }, []);
 
@@ -149,7 +149,7 @@ const Dashboard = () => {
         ? Math.round((stats.completedTasks / stats.totalTasks) * 100) 
         : 0;
 
-    // Tiêu đề dựa trên Vai trò và T��n
+    // Tiêu đề dựa trên Vai trò và Tên
     const roleTitle = role === 'admin' || role === 'bod' ? 'Quản trị' : role === 'leader' ? 'Leader' : 'Nhân viên';
 
 
