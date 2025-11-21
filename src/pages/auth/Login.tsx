@@ -7,11 +7,35 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { signIn, signUp, getCurrentUser } from "@/lib/auth";
-import { Loader2 } from "lucide-react"; 
+import { Loader2 } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 // --- Custom Constants ---
 const APP_NAME = "MSC Center - HRM AI";
 const LOGO_PATH = "/LOGO.PNG"; // Đường dẫn đến logo tổ chức
+
+const ROLES = [
+  { value: "staff", label: "Nhân Viên" },
+  { value: "it", label: "IT" },
+  { value: "hr", label: "HR" },
+  { value: "design", label: "Design" },
+  { value: "content", label: "Content" },
+];
+
+const DEPARTMENTS = [
+  { value: "it", label: "Công Nghệ Thông Tin" },
+  { value: "hr", label: "Nhân Sự" },
+  { value: "sales", label: "Bán Hàng" },
+  { value: "marketing", label: "Marketing" },
+  { value: "design", label: "Thiết Kế" },
+  { value: "content", label: "Nội Dung" },
+];
 
 const Login = () => {
     const navigate = useNavigate();
@@ -21,8 +45,11 @@ const Login = () => {
     const [loginPassword, setLoginPassword] = useState("");
     const [signupEmail, setSignupEmail] = useState("");
     const [signupPassword, setSignupPassword] = useState("");
+    const [signupPhone, setSignupPhone] = useState("");
     const [signupFirstName, setSignupFirstName] = useState("");
     const [signupLastName, setSignupLastName] = useState("");
+    const [signupRole, setSignupRole] = useState("");
+    const [signupDepartment, setSignupDepartment] = useState("");
 
     // --- Logic: Kiểm tra Auth và Redirect ---
     useEffect(() => {
