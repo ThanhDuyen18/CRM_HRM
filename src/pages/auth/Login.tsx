@@ -62,6 +62,33 @@ const Login = () => {
         checkUser();
     }, [navigate]);
 
+    // --- Handle CV File Upload ---
+    const handleCvUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            // Validate file type (PDF, DOC, DOCX)
+            const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+            if (!validTypes.includes(file.type)) {
+                toast({
+                    variant: "destructive",
+                    title: "Định dạng không hợp lệ",
+                    description: "Vui lòng upload file PDF hoặc Word"
+                });
+                return;
+            }
+            // Validate file size (max 5MB)
+            if (file.size > 5 * 1024 * 1024) {
+                toast({
+                    variant: "destructive",
+                    title: "File quá lớn",
+                    description: "Kích thước file không được vượt quá 5MB"
+                });
+                return;
+            }
+            setCvFile(file);
+        }
+    };
+
     // --- Xử lý Đăng nhập ---
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -96,7 +123,7 @@ const Login = () => {
         }
     };
 
-    // --- X��� lý Đăng ký ---
+    // --- Xử lý Đăng ký ---
     const handleSignup = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
