@@ -61,11 +61,23 @@ const DashboardLayout = ({ children, role = 'staff' }: DashboardLayoutProps) => 
                 navigate("/auth/login");
                 return;
             }
-            
-            setUser(currentUser); 
+
+            // Check registration status
+            const { data: registration } = await supabase
+                .from('user_registrations')
+                .select('status')
+                .eq('user_id', currentUser.id)
+                .single();
+
+            if (registration?.status === 'pending' || registration?.status === 'rejected') {
+                navigate("/auth/pending-approval");
+                return;
+            }
+
+            setUser(currentUser);
             const userProfile = await getUserProfile(currentUser.id);
             setProfile(userProfile);
-            
+
             const fetchedRole = await getUserRole(currentUser.id);
             setUserRole(fetchedRole);
         };
