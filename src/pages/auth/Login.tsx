@@ -3,10 +3,10 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
-import { signIn, signUp, getCurrentUser } from "@/lib/auth";
+import { signIn, signUp, getCurrentUser } from "@/lib/auth"; // Giả định signIn/signUp chỉ cần email/password
 import { Loader2 } from "lucide-react"; 
 
 // --- Custom Constants ---
@@ -17,12 +17,18 @@ const Login = () => {
     const navigate = useNavigate();
     const { toast } = useToast();
     const [isLoading, setIsLoading] = useState(false);
+    
+    // --- State cho Đăng nhập ---
     const [loginEmail, setLoginEmail] = useState("");
     const [loginPassword, setLoginPassword] = useState("");
-    const [signupEmail, setSignupEmail] = useState("");
-    const [signupPassword, setSignupPassword] = useState("");
+
+    // --- State cho Đăng ký (Đã được Tách riêng) ---
     const [signupFirstName, setSignupFirstName] = useState("");
     const [signupLastName, setSignupLastName] = useState("");
+    // Đã tách riêng state cho Email và Phone Number
+    const [signupEmail, setSignupEmail] = useState("");
+    const [signupPhoneNumber, setSignupPhoneNumber] = useState(""); 
+    const [signupPassword, setSignupPassword] = useState("");
 
     // --- Logic: Kiểm tra Auth và Redirect ---
     useEffect(() => {
@@ -41,6 +47,7 @@ const Login = () => {
         setIsLoading(true);
 
         try {
+            // Giả định hàm signIn nhận email và password
             const { error } = await signIn(loginEmail, loginPassword);
             
             if (error) {
@@ -56,7 +63,6 @@ const Login = () => {
                 title: "Chào mừng trở lại!",
                 description: "Đăng nhập thành công, đang kiểm tra quyền..."
             });
-            // Giả định logic kiểm tra quyền nằm trong /dashboard hoặc AuthProvider
             navigate("/dashboard"); 
         } catch (error: any) {
             toast({
@@ -74,9 +80,11 @@ const Login = () => {
         e.preventDefault();
         setIsLoading(true);
 
+        // Giả định hàm signUp nhận email, password và object data bổ sung
         try {
             const { error } = await signUp(signupEmail, signupPassword, {
-                full_name: `${signupFirstName} ${signupLastName}`
+                full_name: `${signupFirstName} ${signupLastName}`,
+                phone_number: signupPhoneNumber // Thêm phone_number vào data bổ sung
             });
             
             if (error) {
@@ -92,7 +100,7 @@ const Login = () => {
                 title: "Tạo tài khoản Thành công!",
                 description: "Tài khoản của bạn đã được tạo và đang chờ phê duyệt từ Admin."
             });
-            // Giữ nguyên ở trang này, chờ người dùng đọc thông báo
+            // Giữ nguyên ở trang này sau khi đăng ký thành công
         } catch (error: any) {
             toast({
                 variant: "destructive",
@@ -120,7 +128,6 @@ const Login = () => {
                             {APP_NAME}
                         </h1>
                     </div>
-                   
                 </div>
 
                 {/* --- LOGIN/SIGNUP CARD --- */}
@@ -131,7 +138,6 @@ const Login = () => {
                         <CardHeader className="pt-6 pb-0">
                             <TabsList className="grid w-full grid-cols-2 h-12 text-lg">
                                 <TabsTrigger value="login">Đăng nhập</TabsTrigger>
-                                {/* LỖI ĐÃ ĐƯỢC SỬA Ở ĐÂY */}
                                 <TabsTrigger value="signup">Đăng ký</TabsTrigger> 
                             </TabsList>
                         </CardHeader>
@@ -145,11 +151,11 @@ const Login = () => {
                                     
                                     <div className="space-y-4">
                                         <div className="space-y-2">
-                                            <Label htmlFor="login-email">Tài khoản</Label>
+                                            <Label htmlFor="login-email">Email</Label>
                                             <Input
                                                 id="login-email"
                                                 type="email"
-                                                placeholder=""
+                                                placeholder="Nhập email của bạn" // Đã thêm placeholder
                                                 value={loginEmail}
                                                 onChange={(e) => setLoginEmail(e.target.value)}
                                                 required
@@ -162,7 +168,7 @@ const Login = () => {
                                             <Input
                                                 id="login-password"
                                                 type="password"
-                                                placeholder=""
+                                                placeholder="********" // Đã thêm placeholder
                                                 value={loginPassword}
                                                 onChange={(e) => setLoginPassword(e.target.value)}
                                                 required
@@ -191,7 +197,7 @@ const Login = () => {
                             </form>
                         </TabsContent>
 
-                        {/* --- TAB CONTENT: ĐĂNG KÝ --- */}
+                        {/* --- TAB CONTENT: ĐĂNG KÝ (Đã sửa lỗi lặp trường thông tin) --- */}
                         <TabsContent value="signup">
                             <form onSubmit={handleSignup}>
                                 <CardContent className="space-y-6 pt-6">
@@ -203,7 +209,7 @@ const Login = () => {
                                             <Input
                                                 id="signup-firstname"
                                                 type="text"
-                                                placeholder=""
+                                                placeholder="Ví dụ: Nguyễn"
                                                 value={signupFirstName}
                                                 onChange={(e) => setSignupFirstName(e.target.value)}
                                                 required
@@ -216,7 +222,7 @@ const Login = () => {
                                             <Input
                                                 id="signup-lastname"
                                                 type="text"
-                                                placeholder=""
+                                                placeholder="Ví dụ: Văn A"
                                                 value={signupLastName}
                                                 onChange={(e) => setSignupLastName(e.target.value)}
                                                 required
@@ -224,24 +230,28 @@ const Login = () => {
                                             />
                                         </div>
                                     </div>
+                                    
+                                    {/* SỐ ĐIỆN THOẠI - ĐÃ DÙNG STATE VÀ ID RIÊNG */}
                                     <div className="space-y-2">
-                                        <Label htmlFor="signup-email">Số điện thoại</Label>
+                                        <Label htmlFor="signup-phone">Số điện thoại</Label>
                                         <Input
-                                            id="numberID"
-                                            type="number"
-                                            placeholder=""
-                                            value={signupEmail}
-                                            onChange={(e) => setSignupEmail(e.target.value)}
+                                            id="signup-phone"
+                                            type="tel" // Thay type="number" bằng type="tel" cho số điện thoại
+                                            placeholder="09xx xxx xxx"
+                                            value={signupPhoneNumber}
+                                            onChange={(e) => setSignupPhoneNumber(e.target.value)}
                                             required
                                             disabled={isLoading}
                                         />
                                     </div>
+                                    
+                                    {/* EMAIL - ĐÃ DÙNG STATE VÀ ID RIÊNG */}
                                     <div className="space-y-2">
-                                        <Label htmlFor="signup-email">Email</Label>
+                                        <Label htmlFor="signup-email-field">Email</Label>
                                         <Input
-                                            id="signup-email"
+                                            id="signup-email-field" // ID đã được đổi
                                             type="email"
-                                            placeholder=""
+                                            placeholder="email@congty.com"
                                             value={signupEmail}
                                             onChange={(e) => setSignupEmail(e.target.value)}
                                             required
@@ -254,7 +264,7 @@ const Login = () => {
                                         <Input
                                             id="signup-password"
                                             type="password"
-                                            placeholder=""
+                                            placeholder="********"
                                             value={signupPassword}
                                             onChange={(e) => setSignupPassword(e.target.value)}
                                             required
