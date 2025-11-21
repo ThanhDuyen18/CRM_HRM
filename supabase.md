@@ -1,6 +1,6 @@
-# Supabase Database Setup Guide - HRM CRM
+# Supabase Database Setup Guide - HRM
 
-Complete guide for setting up and configuring the Supabase PostgreSQL database for the HRM CRM application.
+Complete guide for setting up and configuring the Supabase PostgreSQL database for the HRM application.
 
 ---
 
@@ -66,7 +66,7 @@ const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || "your
 
 ## Database Schema
 
-### Complete Database Structure for HRM CRM
+### Complete Database Structure for HRM
 
 #### Table 1: `auth.users` (Built-in Supabase)
 System-managed table for authentication. Automatically created by Supabase.

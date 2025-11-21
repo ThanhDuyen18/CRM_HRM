@@ -1,6 +1,6 @@
-# HRM CRM - Project Review & File Documentation
+# HRM - Project Review & File Documentation
 
-**Project**: HRM CRM - Enterprise Resource Management Platform  
+**Project**: HRM - Enterprise Resource Management Platform  
 **Type**: React + Vite + TypeScript + Tailwind CSS + Shadcn UI  
 **Database**: Supabase (PostgreSQL)  
 **Build Tool**: Vite  
@@ -110,7 +110,7 @@ All page components are located in `src/pages/` and serve as primary route handl
 ### `src/pages/Index.tsx`
 - **Purpose**: Landing/home page
 - **Features**:
-  - Hero section with "HRM CRM" branding
+  - Hero section with "HRM" branding
   - Feature showcase grid (6 main features)
   - Call-to-action sections
   - Automatic redirect to dashboard if user is authenticated
@@ -213,7 +213,7 @@ All page components are located in `src/pages/` and serve as primary route handl
   - Error and success toast notifications
   - Automatic redirect to dashboard if already logged in
   - Loading states during authentication
-  - HRM CRM branding
+  - HRM branding
 - **Related Functions**: signIn, signUp from auth library
 
 ---
@@ -225,7 +225,7 @@ All page components are located in `src/pages/` and serve as primary route handl
 #### `src/components/layout/DashboardLayout.tsx`
 - **Purpose**: Main layout wrapper for authenticated pages
 - **Features**:
-  - Sticky header with HRM CRM branding
+  - Sticky header with HRM branding
   - User avatar dropdown menu with logout
   - Theme toggle (dark/light mode)
   - Notification bell

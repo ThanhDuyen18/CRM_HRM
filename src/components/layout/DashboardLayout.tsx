@@ -138,12 +138,12 @@ const DashboardLayout = ({ children, role = 'staff' }: DashboardLayoutProps) => 
                         <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-primary flex items-center justify-center overflow-hidden p-1 shadow-sm flex-shrink-0">
                             <img
                                 src="/LOGO.PNG"
-                                alt="HRM CRM Logo"
+                                alt="HRM Logo"
                                 className="w-full h-full object-contain"
                             />
                         </div>
                         <div className="hidden sm:block min-w-0">
-                            <h1 className="text-lg md:text-xl font-heading font-bold tracking-tight truncate">HRM CRM</h1>
+                            <h1 className="text-lg md:text-xl font-heading font-bold tracking-tight truncate">HRM</h1>
                             <p className="text-xs text-muted-foreground hidden md:block">{getRoleDisplayName(userRole)}</p>
                         </div>
                     </div>

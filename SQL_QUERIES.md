@@ -1,4 +1,4 @@
-# SQL Queries for Registration Approval System - HRM CRM
+# SQL Queries for Registration Approval System - HRM
 
 ## Overview
 This document contains all SQL queries needed to set up the registration approval system in Supabase. The system allows new users to register, then Admin/HR roles can approve or reject registrations and assign appropriate roles.

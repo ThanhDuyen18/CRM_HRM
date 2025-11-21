@@ -154,7 +154,7 @@ const UsersManagement = () => {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             const { error: profileError } = await supabase
                 .from('profiles')
-                .update({ team_id: newTeamId, shift_id: newShiftId } as any) 
+                .update({ team_id: newTeamId, shift_id: newShiftId } as unknown) 
                 .eq('id', userId);
 
             if (profileError) throw profileError;
