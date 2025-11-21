@@ -136,8 +136,8 @@ const Dashboard = () => {
                 } else if (userRole === 'leader' || userRole === 'admin' || userRole === 'bod') {
                     await loadAdminStats();
                 }
-            } catch (error) {
-                console.error("Lỗi tải dashboard:", error);
+            } catch (error: any) {
+                console.error("Lỗi tải dashboard:", error?.message || error);
             } finally {
                 setLoading(false);
             }
