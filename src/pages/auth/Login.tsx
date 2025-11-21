@@ -160,24 +160,109 @@ const Login = () => {
         setIsLoading(true);
 
         try {
-            const { error } = await signUp(signupEmail, signupPassword, {
-                full_name: `${signupFirstName} ${signupLastName}`
+            // Validate required fields
+            if (!signupFirstName || !signupLastName || !signupEmail || !signupPassword || !signupPhone || !signupDepartment || !signupEmploymentStatus) {
+                toast({
+                    variant: "destructive",
+                    title: "Thông tin không đầy đủ",
+                    description: "Vui lòng điền đầy đủ tất cả các trường bắt buộc"
+                });
+                setIsLoading(false);
+                return;
+            }
+
+            // Validate password length
+            if (signupPassword.length < 6) {
+                toast({
+                    variant: "destructive",
+                    title: "Mật khẩu không hợp lệ",
+                    description: "Mật khẩu phải có ít nhất 6 ký tự"
+                });
+                setIsLoading(false);
+                return;
+            }
+
+            // Sign up user
+            const { data: signupData, error: signupError } = await signUp(signupEmail, signupPassword, {
+                first_name: signupFirstName,
+                last_name: signupLastName,
+                phone: signupPhone,
+                department: signupDepartment,
+                employment_status: signupEmploymentStatus
             });
-            
-            if (error) {
+
+            if (signupError) {
                 toast({
                     variant: "destructive",
                     title: "Đăng ký Thất bại",
-                    description: error.message
+                    description: signupError.message
                 });
                 return;
             }
 
+            if (!signupData.user) {
+                toast({
+                    variant: "destructive",
+                    title: "Lỗi Đăng ký",
+                    description: "Không thể tạo tài khoản. Vui lòng thử lại."
+                });
+                return;
+            }
+
+            // Upload CV if provided
+            let cvUrl = null;
+            if (cvFile) {
+                const fileExt = cvFile.name.split('.').pop();
+                const fileName = `${signupData.user.id}-cv.${fileExt}`;
+
+                const { data: uploadData, error: uploadError } = await supabase.storage
+                    .from('cv-files')
+                    .upload(`registrations/${fileName}`, cvFile);
+
+                if (uploadError) {
+                    console.error('CV upload error:', uploadError);
+                    // Continue without CV - not critical
+                } else if (uploadData) {
+                    cvUrl = uploadData.path;
+                }
+            }
+
+            // Create registration record
+            const { error: registrationError } = await supabase
+                .from('user_registrations')
+                .insert({
+                    user_id: signupData.user.id,
+                    email: signupEmail,
+                    first_name: signupFirstName,
+                    last_name: signupLastName,
+                    phone: signupPhone,
+                    department: signupDepartment,
+                    employment_status: signupEmploymentStatus,
+                    cv_url: cvUrl,
+                    requested_role: 'staff',
+                    status: 'pending'
+                });
+
+            if (registrationError) {
+                console.error('Registration creation error:', registrationError);
+                // Don't show error to user - registration may have been created by trigger
+            }
+
             toast({
-                title: "Tạo tài khoản Thành công!",
-                description: "Tài khoản của bạn đã được tạo và đang chờ phê duyệt từ Admin."
+                title: "✓ Đăng ký Thành công!",
+                description: "Tài khoản của bạn đã được tạo. Vui lòng đăng nhập để chờ Admin phê duyệt."
             });
-            // Giữ nguyên ở trang này, chờ người dùng đọc thông báo
+
+            // Clear signup form
+            setSignupFirstName("");
+            setSignupLastName("");
+            setSignupEmail("");
+            setSignupPassword("");
+            setSignupPhone("");
+            setSignupDepartment("");
+            setSignupEmploymentStatus("");
+            setCvFile(null);
+
         } catch (error: any) {
             toast({
                 variant: "destructive",
