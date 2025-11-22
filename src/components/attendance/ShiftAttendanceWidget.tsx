@@ -98,10 +98,10 @@ const ShiftAttendanceWidget = () => {
   const loadAllAttendance = useCallback(async (uid: string) => {
     try {
       const { data, error } = await supabase
-        .from('attendance')
+        .from('shift_attendance')
         .select('*')
         .eq('user_id', uid)
-        .order('timestamp', { ascending: false })
+        .order('date', { ascending: false })
         .limit(100);
 
       if (error) {
@@ -126,11 +126,10 @@ const ShiftAttendanceWidget = () => {
     try {
       const today = new Date().toISOString().split('T')[0];
       const { data, error } = await supabase
-        .from('attendance')
+        .from('shift_attendance')
         .select('*')
         .eq('user_id', uid)
-        .gte('timestamp', `${today}T00:00:00`)
-        .lte('timestamp', `${today}T23:59:59`)
+        .eq('date', today)
         .order('shift_type');
 
       if (error) {
@@ -140,7 +139,7 @@ const ShiftAttendanceWidget = () => {
       }
       setTodayRecords(data || []);
     } catch (error) {
-      let errorMessage = 'Không thể tải chấm công hôm nay';
+      let errorMessage = 'Không thể t���i chấm công hôm nay';
       if (error instanceof Error) {
         errorMessage = error.message;
       } else if (typeof error === 'string') {
