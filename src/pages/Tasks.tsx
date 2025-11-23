@@ -18,7 +18,7 @@ import DevelopmentTab from "@/components/tasks/DevelopmentTab";
 import FilesTab from "@/components/tasks/FilesTab";
 import AnalyticsTab from "@/components/tasks/AnalyticsTab";
 
-import { LayoutGrid, List, Calendar, Users, FileText, Target, Waypoints, ClipboardList, GitBranch, File, BarChart3 } from "lucide-react";
+import { LayoutGrid, List, Calendar, Users, FileText, Target, Waypoints, ClipboardList, GitBranch, File, BarChart3,Plus } from "lucide-react";
 
 const Tasks = () => {
   const [role, setRole] = useState<UserRole>('staff');
