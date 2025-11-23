@@ -96,7 +96,7 @@ const EditAttendanceDialog = ({ open, onOpenChange, record, onSave }: EditAttend
     } catch (error) {
       toast({
         variant: "destructive",
-        title: "Lỗi",
+        title: "L��i",
         description: error instanceof Error ? error.message : "Không thể cập nhật"
       });
     } finally {
@@ -110,7 +110,19 @@ const EditAttendanceDialog = ({ open, onOpenChange, record, onSave }: EditAttend
         <DialogHeader>
           <DialogTitle>Chỉnh sửa chấm công</DialogTitle>
           <DialogDescription>
-            {record.user_name} - {format(new Date(record.attendance_date), 'dd/MM/yyyy')}
+            {record.user_name} - {(() => {
+              const isValidDate = (dateString: string | null): boolean => {
+                if (!dateString) return false;
+                const date = new Date(dateString);
+                return date instanceof Date && !isNaN(date.getTime());
+              };
+              if (!isValidDate(record.attendance_date)) return 'N/A';
+              try {
+                return format(new Date(record.attendance_date), 'dd/MM/yyyy');
+              } catch {
+                return 'N/A';
+              }
+            })()}
           </DialogDescription>
         </DialogHeader>
 
