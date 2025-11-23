@@ -305,12 +305,11 @@ const AdminAttendanceManagement = () => {
             {/* Status Filter */}
             <div>
               <label className="text-xs font-medium text-muted-foreground mb-1 block">Trạng thái</label>
-              <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <Select value={filterStatus || ""} onValueChange={setFilterStatus}>
                 <SelectTrigger>
                   <SelectValue placeholder="Tất cả" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="">Tất cả</SelectItem>
                   <SelectItem value="present">Có công</SelectItem>
                   <SelectItem value="absent">Vắng</SelectItem>
                   <SelectItem value="leave">Nghỉ phép</SelectItem>
