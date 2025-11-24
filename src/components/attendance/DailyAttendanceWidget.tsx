@@ -164,8 +164,13 @@ const DailyAttendanceWidget = () => {
       calculateStats(data || []);
     } catch (error) {
       let errorMessage = 'Không thể tải lịch sử chấm công';
-      if (error instanceof Error) {
-        errorMessage = error.message;
+      try {
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+      } catch (e) {
+        // Error object might not be accessible due to response streaming issues
+        console.error('Could not access error message:', e);
       }
       console.error('Error loading attendance records:', errorMessage);
     }
