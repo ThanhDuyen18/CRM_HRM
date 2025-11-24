@@ -139,6 +139,30 @@ const LeaveRequestForm = () => {
             <CardContent className="p-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
 
+                    {/* Leave Balance Info for Annual Leave */}
+                    {leaveType === 'annual' && (
+                        <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 flex gap-3">
+                            <AlertCircle className="h-5 w-5 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
+                            <div className="flex-1 text-sm">
+                                <p className="font-semibold text-blue-900 dark:text-blue-100">Thông tin Nghỉ phép Năm</p>
+                                <p className="text-blue-800 dark:text-blue-300 mt-1">
+                                    Số ngày còn lại: <span className="font-bold text-lg">{leaveBalance}</span> ngày
+                                    {estimatedDays > 0 && (
+                                        <>
+                                            <br />
+                                            Dự kiến sử dụng: <span className="font-bold">{estimatedDays}</span> ngày
+                                            {estimatedDays <= leaveBalance ? (
+                                                <span className="text-green-700 dark:text-green-400 ml-2">✓</span>
+                                            ) : (
+                                                <span className="text-red-700 dark:text-red-400 ml-2">✗ Vượt quá</span>
+                                            )}
+                                        </>
+                                    )}
+                                </p>
+                            </div>
+                        </div>
+                    )}
+
                     {/* DÒNG 1: LOẠI NGHỈ PHÉP */}
                     <div>
                         <Label htmlFor="type" className="font-semibold">Loại nghỉ phép *</Label>
