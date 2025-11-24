@@ -213,26 +213,14 @@ const AdminAttendanceManagement = () => {
     if (!recordToDelete) return;
 
     try {
-      const { error } = await supabase
-        .from('daily_attendance')
-        .delete()
-        .eq('id', recordToDelete.id);
-
-      if (error) throw error;
-
-      toast({
-        title: "Thành công",
-        description: "Đã xóa bản ghi chấm công"
-      });
-
-      setRecordToDelete(null);
-      await loadRecords();
-    } catch (error) {
       toast({
         variant: "destructive",
-        title: "Lỗi",
-        description: error instanceof Error ? error.message : "Không thể xóa bản ghi"
+        title: "Không thể xóa",
+        description: "Chức năng xóa bản ghi chấm công hiện không khả dụng. Vui lòng liên hệ quản trị viên."
       });
+      setRecordToDelete(null);
+    } catch (error) {
+      console.error('Error:', error);
     }
   };
 
