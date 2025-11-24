@@ -106,16 +106,57 @@ const AdminAttendanceManagement = () => {
   const loadRecords = useCallback(async () => {
     setIsLoading(true);
     try {
-      let query = supabase.from('daily_attendance').select('*');
+      // Load attendance records and aggregate into daily summaries
+      const { data: records, error: recordsError } = await supabase.from('attendance').select('*').order('timestamp', { ascending: false });
 
-      if (filterDate) {
-        query = query.eq('attendance_date', filterDate);
-      }
-      if (filterStatus) {
-        query = query.eq('status', filterStatus);
-      }
+      if (recordsError) throw recordsError;
 
-      const { data, error } = await query.order('attendance_date', { ascending: false });
+      // Group records by date
+      const dailyMap = new Map<string, any>();
+
+      (records || []).forEach(record => {
+        const date = record.timestamp.split('T')[0];
+        if (!dailyMap.has(date)) {
+          dailyMap.set(date, {
+            id: `daily-${record.user_id}-${date}`,
+            user_id: record.user_id,
+            attendance_date: date,
+            check_in_time: null,
+            check_out_time: null,
+            total_hours: 0,
+            session_count: 0,
+            status: 'absent',
+            notes: null,
+            created_at: record.created_at
+          });
+        }
+
+        const daily = dailyMap.get(date)!;
+        if (record.type === 'check_in') {
+          if (!daily.check_in_time) {
+            daily.check_in_time = record.timestamp;
+          }
+          daily.session_count += 1;
+        } else if (record.type === 'check_out') {
+          daily.check_out_time = record.timestamp;
+        }
+      });
+
+      const data = Array.from(dailyMap.values()).map(daily => {
+        if (daily.check_in_time && daily.check_out_time) {
+          const inTime = new Date(daily.check_in_time).getTime();
+          const outTime = new Date(daily.check_out_time).getTime();
+          daily.total_hours = (outTime - inTime) / (1000 * 60 * 60);
+          daily.status = 'present';
+        }
+        return daily;
+      }).filter(record => {
+        if (filterDate && record.attendance_date !== filterDate) return false;
+        if (filterStatus && record.status !== filterStatus) return false;
+        return true;
+      }).sort((a, b) => new Date(b.attendance_date).getTime() - new Date(a.attendance_date).getTime());
+
+      const error = null;
       if (error) throw error;
 
       // Join with user and team data
@@ -200,7 +241,7 @@ const AdminAttendanceManagement = () => {
       toast({
         variant: "destructive",
         title: "Lỗi",
-        description: "Không có dữ li��u để xuất"
+        description: "Không có dữ liệu để xuất"
       });
       return;
     }
