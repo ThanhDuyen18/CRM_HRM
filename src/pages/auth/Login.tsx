@@ -13,7 +13,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 // --- Custom Constants ---
 const APP_NAME = "MSC Center - HRM AI";
-const LOGO_PATH = "/LOGO.PNG"; // Đường dẫn đến logo tổ chức
+const LOGO_PATH = "/LOGO.PNG"; // Đường dẫn đến logo tổ ch��c
 
 const DEPARTMENTS = [
     { value: "IT", label: "Công Nghệ Thông Tin" },
@@ -205,26 +205,8 @@ const Login = () => {
                 }
             }
 
-            // Create registration record
-            const { error: registrationError } = await supabase
-                .from('user_registrations')
-                .insert({
-                    user_id: signupData.user.id,
-                    email: signupEmail,
-                    first_name: signupFirstName,
-                    last_name: signupLastName,
-                    phone: signupPhone,
-                    department: signupDepartment,
-                    employment_status: signupEmploymentStatus,
-                    cv_url: cvUrl,
-                    requested_role: 'staff',
-                    status: 'pending'
-                });
-
-            if (registrationError) {
-                console.error('Registration creation error:', registrationError);
-                // Don't show error to user - registration may have been created by trigger
-            }
+            // Skip registration record as table doesn't exist
+            // User is created and can log in directly
 
             toast({
                 title: "✓ Đăng ký Thành công!",
