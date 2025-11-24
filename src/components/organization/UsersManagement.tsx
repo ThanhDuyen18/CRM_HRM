@@ -686,19 +686,105 @@ const UsersManagement = () => {
             
             {/* Nút Thêm User */}
             <div className="flex justify-start">
-                <Dialog open={isAddUserDialogOpen} onOpenChange={setIsAddUserDialogOpen}>
+                <Dialog open={isCreateUserOpen} onOpenChange={setIsCreateUserOpen}>
                     <DialogTrigger asChild>
                         <Button className="bg-primary hover:bg-primary/90">
                             <Plus className="h-4 w-4 mr-2" />
                             Thêm Người dùng
                         </Button>
                     </DialogTrigger>
-                    <DialogContent>
+                    <DialogContent className="max-w-lg">
                         <DialogHeader>
                             <DialogTitle>Thêm Người dùng Mới</DialogTitle>
-                            <DialogDescription>Chức năng này sẽ yêu cầu người dùng đăng ký hoặc cần Service Role để tạo tài khoản trực tiếp.</DialogDescription>
+                            <DialogDescription>Nhập thông tin người dùng mới. Họ sẽ nhận được email để thiết lập mật khẩu.</DialogDescription>
                         </DialogHeader>
-                        {/* Form Thêm Người dùng sẽ được đặt ở đây */}
+                        <div className="space-y-4">
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <Label htmlFor="create-first-name">Họ *</Label>
+                                    <Input
+                                        id="create-first-name"
+                                        value={formData.first_name}
+                                        onChange={(e) => setFormData({ ...formData, first_name: e.target.value })}
+                                        placeholder="Ví dụ: Nguyễn"
+                                    />
+                                </div>
+                                <div>
+                                    <Label htmlFor="create-last-name">Tên *</Label>
+                                    <Input
+                                        id="create-last-name"
+                                        value={formData.last_name}
+                                        onChange={(e) => setFormData({ ...formData, last_name: e.target.value })}
+                                        placeholder="Ví dụ: Văn A"
+                                    />
+                                </div>
+                            </div>
+
+                            <div>
+                                <Label htmlFor="create-email">Email *</Label>
+                                <Input
+                                    id="create-email"
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                    placeholder="user@example.com"
+                                />
+                            </div>
+
+                            <div>
+                                <Label htmlFor="create-phone">Số điện thoại *</Label>
+                                <Input
+                                    id="create-phone"
+                                    type="tel"
+                                    value={formData.phone}
+                                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                                    placeholder="0123456789"
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <Label htmlFor="create-team">Đội nhóm</Label>
+                                    <Select value={formData.team_id} onValueChange={(v) => setFormData({ ...formData, team_id: v })}>
+                                        <SelectTrigger id="create-team" className="h-10"><SelectValue placeholder="Chọn đội" /></SelectTrigger>
+                                        <SelectContent>
+                                            {allTeams.map(team => (
+                                                <SelectItem key={team.id} value={team.id}>{team.name}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+
+                                <div>
+                                    <Label htmlFor="create-shift">Ca làm việc</Label>
+                                    <Select value={formData.shift_id} onValueChange={(v) => setFormData({ ...formData, shift_id: v })}>
+                                        <SelectTrigger id="create-shift" className="h-10"><SelectValue placeholder="Chọn ca" /></SelectTrigger>
+                                        <SelectContent>
+                                            {allShifts.map(shift => (
+                                                <SelectItem key={shift.id} value={shift.id}>{shift.name}</SelectItem>
+                                            ))}
+                                        </SelectContent>
+                                    </Select>
+                                </div>
+                            </div>
+
+                            <div>
+                                <Label htmlFor="create-employment">Tình trạng</Label>
+                                <Select value={formData.employment_status} onValueChange={(v) => setFormData({ ...formData, employment_status: v })}>
+                                    <SelectTrigger id="create-employment" className="h-10"><SelectValue placeholder="Chọn tình trạng" /></SelectTrigger>
+                                    <SelectContent>
+                                        <SelectItem value="Employed">Đang làm việc</SelectItem>
+                                        <SelectItem value="Student">Sinh viên</SelectItem>
+                                        <SelectItem value="Trainee">Thực tập sinh</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+
+                            <Button className="w-full" onClick={handleCreateUser} disabled={loading}>
+                                {loading ? <Loader2 className="h-4 w-4 mr-2 animate-spin" /> : null}
+                                Tạo người dùng
+                            </Button>
+                        </div>
                     </DialogContent>
                 </Dialog>
             </div>
