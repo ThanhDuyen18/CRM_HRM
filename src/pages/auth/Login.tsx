@@ -11,9 +11,10 @@ import { signIn, signUp, getCurrentUser, createUserRegistration } from "@/lib/au
 import { Loader2, Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client"; 
 
+<title>HRM - Login</title>
 // --- Custom Constants ---
-const APP_NAME = "MSC Center - HRM AI";
-const LOGO_PATH = "/LOGO.PNG"; // Đường dẫn đến logo tổ ch��c
+const APP_NAME = "";
+const LOGO_PATH = "/LOGO.PNG"; 
 
 const DEPARTMENTS = [
     { value: "IT", label: "Công Nghệ Thông Tin" },
@@ -268,7 +269,7 @@ const Login = () => {
                         <TabsContent value="login">
                             <form onSubmit={handleLogin}>
                                 <CardContent className="space-y-6 pt-6">
-                                    <CardTitle className="text-2xl text-center">Chúc một ngày làm việc năng suất</CardTitle>
+                                    <CardTitle className="text-2xl text-center">Xác minh tài khoản MSC để  sử dụng các ứng dụng  của MSC</CardTitle>
                                 
                                     
                                     <div className="space-y-4">
