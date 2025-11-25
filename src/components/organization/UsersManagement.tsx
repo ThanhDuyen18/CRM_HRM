@@ -501,17 +501,30 @@ const UsersManagement = () => {
                                     </div>
 
                                     {/* Tài liệu & CV */}
-                                    <div className="space-y-1">
-                                        <h4 className="font-bold flex items-center gap-1 text-primary"><FileText className="w-4 h-4" /> Tài liệu (CV)</h4>
-                                        
-                                        {user.cv_url ? (
-                                            <a href={user.cv_url} target="_blank" rel="noopener noreferrer">
-                                                <Button variant="secondary" size="sm" className="bg-green-600 hover:bg-green-700 text-white mt-2">Xem CV</Button>
-                                            </a>
-                                        ) : (
-                                            <p className="text-sm text-red-500 mt-2">Chưa có CV được tải lên.</p>
-                                        )}
-                                    </div>
+<div className="space-y-1">
+    <h4 className="font-bold flex items-center gap-1 text-primary">
+        <FileText className="w-4 h-4" /> Tài liệu (CV)
+    </h4>
+
+    {user.cv_url ? (
+        <Button
+            variant="secondary"
+            size="sm"
+            className="bg-green-600 hover:bg-green-700 text-white mt-2"
+            onClick={async () => {
+                const url = await getCvDownloadUrl(user.cv_url);
+                if (url) {
+                    window.open(url, "_blank");
+                }
+            }}
+        >
+            Xem CV
+        </Button>
+    ) : (
+        <p className="text-sm text-red-500 mt-2">Chưa có CV được tải lên.</p>
+    )}
+</div>
+
                                 </div>
                                 
                                 {/* 2. KHỐI HÀNH ĐỘNG QUẢN LÝ */}
